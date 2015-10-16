@@ -21,7 +21,7 @@ end
 class BelongsToOptions < AssocOptions
   def initialize(name, options = {})
     defaults = {foreign_key: "#{name}_id".to_sym,
-                class_name: name.camelcase,
+                class_name: name.to_s.camelcase,
                 primary_key: "id".to_sym
               }
 
@@ -53,7 +53,14 @@ end
 module Associatable
   # Phase IIIb
   def belongs_to(name, options = {})
-    # ...
+    options = BelongsToOptions.new(name, options)
+
+    define_method(:name) do
+      send(:foreign_key, options.foreign_key)
+      send(:class_name, options.class_name)
+      send(:primary_key, options.primary_key)
+    end
+
   end
 
   def has_many(name, options = {})
@@ -66,5 +73,5 @@ module Associatable
 end
 
 class SQLObject
-  # Mixin Associatable here...
+  extend Associatable
 end

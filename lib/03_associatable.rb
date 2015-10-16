@@ -20,13 +20,33 @@ end
 
 class BelongsToOptions < AssocOptions
   def initialize(name, options = {})
-    # ...
+    defaults = {foreign_key: "#{name}_id".to_sym,
+                class_name: name.capitalize,
+                primary_key: "id".to_sym
+              }
+
+    defaults = defaults.merge(options)
+
+    defaults.each do |key, value|
+      self.send("#{key}=", value)
+    end
+
   end
 end
 
 class HasManyOptions < AssocOptions
   def initialize(name, self_class_name, options = {})
-    # ...
+    defaults = {foreign_key: "#{self_class_name.downcase}_id".to_sym,
+                class_name: name.singularize.capitalize,
+                primary_key: "id".to_sym
+              }
+
+    defaults = defaults.merge(options)
+
+    defaults.each do |key, value|
+      self.send("#{key}=", value)
+    end
+
   end
 end
 

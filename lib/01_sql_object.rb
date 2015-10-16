@@ -11,12 +11,15 @@ class SQLObject
   def self.finalize!
   end
 
+  @table_name = nil
+
   def self.table_name=(table_name)
-    # ...
+    @table_name = table_name
   end
 
   def self.table_name
-    # ...
+    @table_name ||= "#{self.to_s.downcase.tableize}" 
+    @table_name
   end
 
   def self.all
